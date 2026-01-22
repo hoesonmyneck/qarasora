@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Manrope", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+body {
+  background-color: #0b1410;
+}
+
+.glass {
+  background: rgba(16, 26, 20, 0.55);
+  border: 1px solid rgba(231, 239, 232, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.parallax-layer {
+  transform: translate3d(0, var(--parallax-offset, 0px), 0);
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+.parallax-bg {
+  background-position: center 0px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  will-change: background-position;
+}
+
+.section-grid {
+  background-image:
+    radial-gradient(rgba(231, 239, 232, 0.08) 1px, transparent 1px),
+    radial-gradient(rgba(231, 239, 232, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px, 64px 64px;
+  background-position: 0 0, 10px 10px;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(231, 239, 232, 0.4), transparent);
+}
+
+.logo-cut {
+  clip-path: polygon(
+    8% 0%,
+    92% 0%,
+    100% 8%,
+    100% 92%,
+    92% 100%,
+    8% 100%,
+    0% 92%,
+    0% 8%
+  );
+}
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    180px circle at var(--x, 50%) var(--y, 50%),
+    rgba(231, 239, 232, 0.2),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}

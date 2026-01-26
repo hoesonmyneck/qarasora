@@ -12,10 +12,12 @@
     ></div>
     <div class="mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
-        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">Мероприятия</p>
-        <h1 class="text-3xl font-semibold">Собираем отрасль офлайн</h1>
+        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
+          {{ t("events.tagline") }}
+        </p>
+        <h1 class="text-3xl font-semibold">{{ t("events.title") }}</h1>
         <p class="text-mist/70">
-          Формируем календарь практик и создаем площадки для решений.
+          {{ t("events.body") }}
         </p>
       </div>
       <div
@@ -25,18 +27,17 @@
       >
         <div class="space-y-3">
           <div class="inline-flex items-center gap-2 rounded-full bg-hemp/20 px-3 py-1 text-xs font-semibold text-mist">
-            Закрепленная новость
+            {{ t("events.pinned.label") }}
           </div>
           <p class="text-lg font-semibold">
-            Национальный День Конопли Qarasora
+            {{ t("events.pinned.title") }}
           </p>
           <p class="text-sm text-mist/70">
-            1 декабря 2026, Астана — итоги первого сезона и стратегическая
-            сессия.
+            {{ t("events.pinned.body") }}
           </p>
         </div>
         <button class="mt-4 rounded-full bg-hemp px-6 py-3 text-sm font-semibold lg:mt-0">
-          Забронировать участие
+          {{ t("events.pinned.cta") }}
         </button>
       </div>
 
@@ -47,14 +48,13 @@
           @mouseleave="clearSpotlight"
         >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
-            12 ноября 2026
+            {{ t("events.news1.date") }}
           </p>
           <p class="mt-2 text-lg font-semibold">
-            Открыт прием заявок на полевые воркшопы 2026
+            {{ t("events.news1.title") }}
           </p>
           <p class="mt-2 text-sm text-mist/70">
-            Посевная, уход и уборка на базе хозяйств участников. Места
-            ограничены.
+            {{ t("events.news1.body") }}
           </p>
         </article>
         <article
@@ -63,14 +63,13 @@
           @mouseleave="clearSpotlight"
         >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
-            28 октября 2026
+            {{ t("events.news2.date") }}
           </p>
           <p class="mt-2 text-lg font-semibold">
-            Обновлены рекомендации по контрактам и лицензиям
+            {{ t("events.news2.title") }}
           </p>
           <p class="mt-2 text-sm text-mist/70">
-            В библиотеке появились новые шаблоны заявок и чек-листы по
-            соответствию.
+            {{ t("events.news2.body") }}
           </p>
         </article>
         <article
@@ -79,13 +78,13 @@
           @mouseleave="clearSpotlight"
         >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
-            10 октября 2026
+            {{ t("events.news3.date") }}
           </p>
           <p class="mt-2 text-lg font-semibold">
-            Подписан меморандум с логистическими партнерами
+            {{ t("events.news3.title") }}
           </p>
           <p class="mt-2 text-sm text-mist/70">
-            Доступны новые маршруты для экспорта волокна и семян.
+            {{ t("events.news3.body") }}
           </p>
         </article>
         <article
@@ -94,13 +93,13 @@
           @mouseleave="clearSpotlight"
         >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
-            22 сентября 2026
+            {{ t("events.news4.date") }}
           </p>
           <p class="mt-2 text-lg font-semibold">
-            Итоги пилотного сезона: результаты первых хозяйств
+            {{ t("events.news4.title") }}
           </p>
           <p class="mt-2 text-sm text-mist/70">
-            Делимся данными по урожайности и выводами агрономов.
+            {{ t("events.news4.body") }}
           </p>
         </article>
       </div>
@@ -109,6 +108,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

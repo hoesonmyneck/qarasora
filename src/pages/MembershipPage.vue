@@ -11,14 +11,13 @@
     <div class="relative z-10 mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
         <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
-          Членство и выгода
+          {{ t("membership.tagline") }}
         </p>
         <h1 class="text-3xl font-semibold">
-          Инвестируйте в успех первого сезона
+          {{ t("membership.title") }}
         </h1>
         <p class="text-mist/70">
-          Условия членства обсуждаются после заявки — мы подбираем формат под
-          масштаб хозяйства и задачи команды.
+          {{ t("membership.body") }}
         </p>
       </div>
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -28,9 +27,9 @@
             @mousemove="setSpotlight"
             @mouseleave="clearSpotlight"
           >
-            <p class="text-lg font-semibold">Живая база данных</p>
+            <p class="text-lg font-semibold">{{ t("membership.card.data.title") }}</p>
             <p class="mt-3 text-sm text-mist/70">
-              Онлайн-карта с результатами и вызовами хозяйств участников.
+              {{ t("membership.card.data.body") }}
             </p>
           </div>
           <div
@@ -38,9 +37,11 @@
             @mousemove="setSpotlight"
             @mouseleave="clearSpotlight"
           >
-            <p class="text-lg font-semibold">Библиотека первых шагов</p>
+            <p class="text-lg font-semibold">
+              {{ t("membership.card.library.title") }}
+            </p>
             <p class="mt-3 text-sm text-mist/70">
-              Шаблоны договоров и заявок на лицензию.
+              {{ t("membership.card.library.body") }}
             </p>
           </div>
           <div
@@ -48,9 +49,11 @@
             @mousemove="setSpotlight"
             @mouseleave="clearSpotlight"
           >
-            <p class="text-lg font-semibold">Организация экспорта</p>
+            <p class="text-lg font-semibold">
+              {{ t("membership.card.export.title") }}
+            </p>
             <p class="mt-3 text-sm text-mist/70">
-              Поиск покупателей и логистика за рубежом.
+              {{ t("membership.card.export.body") }}
             </p>
           </div>
           <div
@@ -58,33 +61,35 @@
             @mousemove="setSpotlight"
             @mouseleave="clearSpotlight"
           >
-            <p class="text-lg font-semibold">Закрытые мероприятия</p>
+            <p class="text-lg font-semibold">
+              {{ t("membership.card.events.title") }}
+            </p>
             <p class="mt-3 text-sm text-mist/70">
-              Практические воркшопы и вебинары с экспертами.
+              {{ t("membership.card.events.body") }}
             </p>
           </div>
         </div>
         <form class="bg-[#E07A2B] rounded-3xl p-6">
-          <p class="text-lg font-semibold">Заявка на вступление</p>
+          <p class="text-lg font-semibold">{{ t("membership.form.title") }}</p>
           <div class="mt-4 space-y-4 text-sm text-mist/70">
             <input
               type="text"
-              placeholder="Имя и фамилия"
+              :placeholder="t('membership.form.name')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
             <input
               type="text"
-              placeholder="Контакты (телефон / email)"
+              :placeholder="t('membership.form.contact')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
             <input
               type="text"
-              placeholder="Регион"
+              :placeholder="t('membership.form.region')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
             <input
               type="text"
-              placeholder="Планируемая площадь посева"
+              :placeholder="t('membership.form.area')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
           </div>
@@ -92,10 +97,10 @@
             type="button"
             class="mt-6 w-full bg-black rounded-full bg-hemp px-6 py-3 text-sm font-semibold text-ink shadow-soft transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(91,126,61,0.6)]"
           >
-            Отправить заявку
+            {{ t("membership.form.submit") }}
           </button>
           <p class="mt-4 text-xs text-mist/60">
-            *Стоимость членства обсуждается индивидуально после первичного контакта.
+            {{ t("membership.form.note") }}
           </p>
         </form>
       </div>
@@ -104,6 +109,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

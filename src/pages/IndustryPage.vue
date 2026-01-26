@@ -10,7 +10,7 @@
     ></div>
     <img
       :src="industryImage"
-      alt="Исследования промышленной конопли"
+      :alt="t('industry.image.alt')"
       class="pointer-events-none absolute right-10 top-16 h-55 w-120 rounded-3xl border border-white/10 object-cover shadow-soft parallax-layer"
       data-parallax
       data-speed="0.06"
@@ -18,12 +18,11 @@
     <div class="mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
         <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
-          Отрасль в Казахстане
+          {{ t("industry.tagline") }}
         </p>
-        <h1 class="text-3xl font-semibold">Почему промышленная конопля?</h1>
+        <h1 class="text-3xl font-semibold">{{ t("industry.title") }}</h1>
         <p class="text-mist/70">
-          Переход к новой культуре — это инвестиция в устойчивость, экспортный
-          потенциал и здоровье почвы.
+          {{ t("industry.body") }}
         </p>
       </div>
       <div class="grid gap-6 lg:grid-cols-3 mt-40">
@@ -32,13 +31,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Экономика</p>
+          <p class="text-lg font-semibold">{{ t("industry.econ.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Культура с понятной экономикой: спрос на волокно, семена и костру уже
-            сформирован в переработке и экспорте. Рентабельность достигается за
-            счет комплексного использования сырья и выстраивания каналов сбыта.
-            Государственная поддержка и прозрачные правила усиливают
-            предсказуемость проекта.
+            {{ t("industry.econ.body") }}
           </p>
         </div>
         <div
@@ -46,12 +41,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Агрономия</p>
+          <p class="text-lg font-semibold">{{ t("industry.agro.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Подходит для климата Казахстана: культура засухоустойчива, быстро
-            набирает зеленую массу и помогает восстанавливать структуру почвы.
-            В севообороте улучшает состояние полей и снижает нагрузку на
-            агрохимию при правильной агротехнике.
+            {{ t("industry.agro.body") }}
           </p>
         </div>
         <div
@@ -59,12 +51,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Закон</p>
+          <p class="text-lg font-semibold">{{ t("industry.law.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Закон делает отрасль легальной и понятной: промышленное назначение
-            культуры четко закреплено. Мы даем практичный разбор требований,
-            лицензирования и отчетности — чтобы запуск был безопасным и
-            соответствовал регуляторике.
+            {{ t("industry.law.body") }}
           </p>
         </div>
       </div>
@@ -74,6 +63,9 @@
 
 <script setup lang="ts">
 import industryImage from "../../1744804041scits_1000x768.jpg";
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;

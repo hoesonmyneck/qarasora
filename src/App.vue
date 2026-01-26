@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
+import { languages, lang, t } from "./i18n";
 
 const navLinks = [
-  { to: "/", label: "Главная" },
-  { to: "/industry", label: "Отрасль" },
-  { to: "/membership", label: "Членство" },
-  { to: "/community", label: "Сообщество" },
-  { to: "/events", label: "Мероприятия" },
-  { to: "/board", label: "Правление" },
-  { to: "/contacts", label: "Контакты" },
+  { to: "/", labelKey: "nav.home" },
+  { to: "/industry", labelKey: "nav.industry" },
+  { to: "/membership", labelKey: "nav.membership" },
+  { to: "/community", labelKey: "nav.community" },
+  { to: "/events", labelKey: "nav.events" },
+  { to: "/board", labelKey: "nav.board" },
+  { to: "/contacts", labelKey: "nav.contacts" },
 ];
 
-const languages = ["RU", "KZ", "EN"] as const;
-const activeLang = ref<(typeof languages)[number]>("RU");
+const activeLang = lang;
 const isLangOpen = ref(false);
 const langMenuRef = ref<HTMLElement | null>(null);
 const isMobileMenuOpen = ref(false);
@@ -23,7 +23,7 @@ const isActive = (to: string) => route.path === to;
 const logoTitle = computed(() => {
   if (route.path === "/") return "Qarasora";
   const current = navLinks.find((link) => link.to === route.path);
-  return current ? `Qarasora / ${current.label}` : "Qarasora";
+  return current ? `Qarasora / ${t(current.labelKey)}` : "Qarasora";
 });
 
 let layers: HTMLElement[] = [];
@@ -100,6 +100,7 @@ watch(
   }
 );
 
+
 onUnmounted(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", update);
@@ -123,7 +124,7 @@ onUnmounted(() => {
             <p class="w-[260px] truncate text-lg font-semibold tracking-wide">
               {{ logoTitle }}
             </p>
-            <p class="text-xs uppercase text-mist/60">Ассоциация Казахстана</p>
+            <p class="text-xs uppercase text-mist/60">{{ t("brand.subtitle") }}</p>
           </div>
         </RouterLink>
         <nav class="hidden items-center gap-6 text-sm text-mist/70 lg:flex -translate-x-8">
@@ -134,7 +135,7 @@ onUnmounted(() => {
             class="transition hover:text-white"
             :class="isActive(link.to) ? 'text-white' : ''"
           >
-            {{ link.label }}
+            {{ t(link.labelKey) }}
           </RouterLink>
         </nav>
         <div class="flex items-center gap-3">
@@ -142,7 +143,7 @@ onUnmounted(() => {
             type="button"
             class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white lg:hidden"
             @click="isMobileMenuOpen = !isMobileMenuOpen"
-            aria-label="Открыть меню"
+            :aria-label="t('menu.open')"
           >
             <span class="text-lg">☰</span>
           </button>
@@ -177,8 +178,8 @@ onUnmounted(() => {
               </button>
             </div>
           </div>
-          <button
-            type="button"
+          <RouterLink
+            to="/portal"
             class="flex items-center gap-2 rounded-full bg-[#E07A2B] px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(224,122,43,0.75)]"
           >
             <svg
@@ -197,8 +198,8 @@ onUnmounted(() => {
                 stroke-linecap="round"
               />
             </svg>
-            Личный кабинет
-          </button>
+            {{ t("nav.portal") }}
+          </RouterLink>
         </div>
       </div>
     </header>
@@ -227,11 +228,12 @@ onUnmounted(() => {
             :class="isActive(link.to) ? 'text-white' : ''"
             @click="isMobileMenuOpen = false"
           >
-            {{ link.label }}
+            {{ t(link.labelKey) }}
           </RouterLink>
-          <button
-            type="button"
+          <RouterLink
+            to="/portal"
             class="flex items-center gap-2 rounded-full bg-[#E07A2B] px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)]"
+            @click="isMobileMenuOpen = false"
           >
             <svg
               width="16"
@@ -249,8 +251,8 @@ onUnmounted(() => {
                 stroke-linecap="round"
               />
             </svg>
-            Личный кабинет
-          </button>
+            {{ t("nav.portal") }}
+          </RouterLink>
         </nav>
       </div>
     </div>
@@ -261,10 +263,14 @@ onUnmounted(() => {
 
     <footer class="border-t border-white/10 px-6 py-8 text-sm text-mist/60">
       <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
-        <p>© 2026 Qarasora. Ассоциация промышленной конопли Казахстана.</p>
+        <p>{{ t("footer.copy") }}</p>
         <div class="flex items-center gap-4">
-          <RouterLink to="/membership" class="hover:text-white">Вступить</RouterLink>
-          <RouterLink to="/contacts" class="hover:text-white">Контакты</RouterLink>
+          <RouterLink to="/membership" class="hover:text-white">
+            {{ t("footer.join") }}
+          </RouterLink>
+          <RouterLink to="/contacts" class="hover:text-white">
+            {{ t("footer.contacts") }}
+          </RouterLink>
         </div>
       </div>
     </footer>

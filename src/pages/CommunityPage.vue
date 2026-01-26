@@ -13,12 +13,11 @@
     <div class="mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
         <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
-          Наше сообщество
+          {{ t("community.tagline") }}
         </p>
-        <h1 class="text-3xl font-semibold">Закрытое пространство практиков</h1>
+        <h1 class="text-3xl font-semibold">{{ t("community.title") }}</h1>
         <p class="text-mist/70">
-          Мы строим профессиональное ядро отрасли, где знания и ресурсы остаются
-          внутри сообщества.
+          {{ t("community.body") }}
         </p>
       </div>
       <div class="grid gap-6 lg:grid-cols-3">
@@ -27,9 +26,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Закрытый чат</p>
+          <p class="text-lg font-semibold">{{ t("community.card.chat.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Основная площадка для ежедневного обмена опытом.
+            {{ t("community.card.chat.body") }}
           </p>
         </div>
         <div
@@ -37,9 +36,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Экспертный совет</p>
+          <p class="text-lg font-semibold">{{ t("community.card.expert.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Агрономы, юристы и логисты с проверенной практикой.
+            {{ t("community.card.expert.body") }}
           </p>
         </div>
         <div
@@ -47,9 +46,9 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Партнеры</p>
+          <p class="text-lg font-semibold">{{ t("community.card.partners.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Лаборатории, поставщики семян, перерабатывающие компании.
+            {{ t("community.card.partners.body") }}
           </p>
         </div>
       </div>
@@ -59,23 +58,27 @@
         @mouseleave="clearSpotlight"
       >
         <div class="space-y-2">
-          <p class="text-lg font-semibold">Личный кабинет участника</p>
+          <p class="text-lg font-semibold">{{ t("community.portal.title") }}</p>
           <p class="text-sm text-mist/70">
-            Доступ к интерактивной базе данных, библиотеке документов, календарю
-            событий и ссылке на закрытый чат.
+            {{ t("community.portal.body") }}
           </p>
         </div>
-        <button
+        <RouterLink
+          to="/portal"
           class="mt-4 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold lg:mt-0"
         >
-          Перейти в кабинет
-        </button>
+          {{ t("community.portal.cta") }}
+        </RouterLink>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

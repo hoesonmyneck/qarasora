@@ -12,11 +12,12 @@
     ></div>
     <div class="mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
-        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">Правление</p>
-        <h1 class="text-3xl font-semibold">Команда, которой доверяют</h1>
+        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
+          {{ t("board.tagline") }}
+        </p>
+        <h1 class="text-3xl font-semibold">{{ t("board.title") }}</h1>
         <p class="text-mist/70">
-          Практикующие лидеры, которые разделяют ответственность за развитие
-          отрасли.
+          {{ t("board.body") }}
         </p>
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -26,10 +27,8 @@
           @mouseleave="clearSpotlight"
         >
           <div class="h-16 w-16 rounded-full bg-white/10"></div>
-          <p class="mt-4 text-lg font-semibold">Председатель</p>
-          <p class="text-sm text-mist/70">
-            [Имя], практикующий фермер / агробизнесмен.
-          </p>
+          <p class="mt-4 text-lg font-semibold">{{ t("board.chair.title") }}</p>
+          <p class="text-sm text-mist/70">{{ t("board.chair.body") }}</p>
         </div>
         <div
           class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
@@ -37,8 +36,10 @@
           @mouseleave="clearSpotlight"
         >
           <div class="h-16 w-16 rounded-full bg-white/10"></div>
-          <p class="mt-4 text-lg font-semibold">Управляющий директор</p>
-          <p class="text-sm text-mist/70">ФИО, отвечает за развитие партнерств.</p>
+          <p class="mt-4 text-lg font-semibold">
+            {{ t("board.director.title") }}
+          </p>
+          <p class="text-sm text-mist/70">{{ t("board.director.body") }}</p>
         </div>
         <div
           class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
@@ -46,10 +47,10 @@
           @mouseleave="clearSpotlight"
         >
           <div class="h-16 w-16 rounded-full bg-white/10"></div>
-          <p class="mt-4 text-lg font-semibold">Юрист-координатор</p>
-          <p class="text-sm text-mist/70">
-            Контактное лицо в Казахстане для оперативных вопросов.
+          <p class="mt-4 text-lg font-semibold">
+            {{ t("board.lawyer.title") }}
           </p>
+          <p class="text-sm text-mist/70">{{ t("board.lawyer.body") }}</p>
         </div>
       </div>
     </div>
@@ -57,6 +58,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

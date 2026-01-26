@@ -10,11 +10,12 @@
     ></div>
     <div class="relative z-10 mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
-        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">Контакты</p>
-        <h1 class="text-3xl font-semibold">Свяжитесь с командой Qarasora</h1>
+        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
+          {{ t("contacts.tagline") }}
+        </p>
+        <h1 class="text-3xl font-semibold">{{ t("contacts.title") }}</h1>
         <p class="text-mist/70">
-          Мы на связи по всем вопросам членства, партнерств и международных
-          коммуникаций.
+          {{ t("contacts.body") }}
         </p>
       </div>
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -23,13 +24,13 @@
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
         >
-          <p class="text-lg font-semibold">Офис в Казахстане</p>
+          <p class="text-lg font-semibold">{{ t("contacts.office.title") }}</p>
           <p class="mt-3 text-sm text-mist/70">
-            Адрес, телефон, email координатора.
+            {{ t("contacts.office.body") }}
           </p>
           <div class="mt-6 space-y-3 text-sm text-mist/70">
-            <p>Международные связи: контакт Асета Бейсенова.</p>
-            <p>Закрытый Telegram-канал для членов — доступ после вступления.</p>
+            <p>{{ t("contacts.office.international") }}</p>
+            <p>{{ t("contacts.office.telegram") }}</p>
           </div>
         </div>
         
@@ -39,6 +40,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "../i18n";
+
+const { t } = useI18n();
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

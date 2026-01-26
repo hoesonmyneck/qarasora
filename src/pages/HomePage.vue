@@ -16,17 +16,15 @@
     <div class="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr]">
       <div class="flex h-full flex-col justify-between gap-8">
         <div class="space-y-8">
-          <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
-            Ассоциация производителей промышленной конопли
-          </p>
-          <h1 class="text-4xl font-semibold leading-tight md:text-5xl">
-            Объединяем первых. Создаем отрасль. От поля к переработке.
-          </h1>
-          <p class="text-lg text-mist/70">
-            Qarasora — площадка для тех, кто уже действует: фермеров,
-            агрохолдингов и инвесторов, готовых строить легальную и устойчивую
-            индустрию в Казахстане.
-          </p>
+        <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
+          {{ t("home.tagline") }}
+        </p>
+        <h1 class="text-4xl font-semibold leading-tight md:text-5xl">
+          {{ t("home.title") }}
+        </h1>
+        <p class="text-lg text-mist/70">
+          {{ t("home.body") }}
+        </p>
         </div>
         <div>
           <div class="mb-6 flex flex-wrap gap-4">
@@ -34,13 +32,13 @@
               to="/membership"
               class="rounded-full bg-[#E07A2B] px-9 py-4 text-base font-semibold text-white shadow-[0_0_32px_rgba(91,126,61,0.7)] transition hover:scale-[1.02] hover:shadow-[0_0_46px_rgba(91,126,61,0.95)]"
             >
-              Вступить в ассоциацию
+              {{ t("home.cta.join") }}
             </RouterLink>
             <RouterLink
               to="/industry"
               class="rounded-full border border-white/20 px-8 py-4 text-base font-semibold transition hover:scale-[1.02]"
             >
-              Узнать об отрасли
+              {{ t("home.cta.industry") }}
             </RouterLink>
           </div>
           <div class="section-divider"></div>
@@ -50,28 +48,30 @@
               @mousemove="setSpotlight"
               @mouseleave="clearSpotlight"
             >
-              Строгий деловой формат
+              {{ t("home.badge.format") }}
             </div>
             <div
               class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
               @mousemove="setSpotlight"
               @mouseleave="clearSpotlight"
             >
-              Реальные данные полей
+              {{ t("home.badge.data") }}
             </div>
             <div
               class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
               @mousemove="setSpotlight"
               @mouseleave="clearSpotlight"
             >
-              Легальная поддержка
+              {{ t("home.badge.legal") }}
             </div>
           </div>
         </div>
       </div>
       <div class="relative">
         <div class="glass rounded-[28px] p-8 shadow-soft">
-          <p class="text-base uppercase text-mist/60 cursor-default">Ассоциация — это</p>
+          <p class="text-base uppercase text-mist/60 cursor-default">
+            {{ t("home.assoc.title") }}
+          </p>
           <div class="mt-6 space-y-5">
             <div
               class="spotlight-card rounded-2xl border border-white/10 p-5 transition hover:scale-[1.02]"
@@ -81,13 +81,15 @@
               <div class="flex items-start gap-4">
                 <img
                   :src="iconData"
-                  alt="График"
+                  :alt="t('home.icon.chart')"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
                 <div class="cursor-default">
-                  <p class="text-base font-semibold">Доступ к данным</p>
+                  <p class="text-base font-semibold">
+                    {{ t("home.assoc.data.title") }}
+                  </p>
                   <p class="text-sm text-mist/70 md:text-base">
-                    Живая база реального опыта с казахстанских полей.
+                    {{ t("home.assoc.data.body") }}
                   </p>
                 </div>
               </div>
@@ -100,13 +102,15 @@
               <div class="flex items-start gap-4">
                 <img
                   :src="iconDocument"
-                  alt="Документ"
+                  :alt="t('home.icon.document')"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
                 <div class="cursor-default">
-                  <p class="text-base font-semibold">Снижение рисков</p>
+                  <p class="text-base font-semibold">
+                    {{ t("home.assoc.risk.title") }}
+                  </p>
                   <p class="text-sm text-mist/70 md:text-base">
-                    Готовые документы и юридическая поддержка.
+                    {{ t("home.assoc.risk.body") }}
                   </p>
                 </div>
               </div>
@@ -119,13 +123,15 @@
               <div class="flex items-start gap-4">
                 <img
                   :src="iconExport"
-                  alt="Экспорт"
+                  :alt="t('home.icon.export')"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
                 <div class="cursor-default">
-                  <p class="text-base font-semibold">Экспорт</p>
+                  <p class="text-base font-semibold">
+                    {{ t("home.assoc.export.title") }}
+                  </p>
                   <p class="text-sm text-mist/70 md:text-base">
-                    Организация продаж и логистики за рубеж.
+                    {{ t("home.assoc.export.body") }}
                   </p>
                 </div>
               </div>
@@ -138,13 +144,15 @@
               <div class="flex items-start gap-4">
                 <img
                   :src="iconCommunity"
-                  alt="Сообщество"
+                  :alt="t('home.icon.community')"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
                 <div class="cursor-default">
-                  <p class="text-base font-semibold">Сообщество</p>
+                  <p class="text-base font-semibold">
+                    {{ t("home.assoc.community.title") }}
+                  </p>
                   <p class="text-sm text-mist/70 md:text-base">
-                    Закрытые встречи с экспертами и коллегами.
+                    {{ t("home.assoc.community.body") }}
                   </p>
                 </div>
               </div>
@@ -162,7 +170,7 @@
       data-speed="0.6"
       :style="{ backgroundImage: `url(${heroImage})` }"
       role="img"
-      aria-label="Агропромышленный ландшафт"
+      :aria-label="t('home.image.alt')"
     ></div>
     <div class="absolute inset-0 bg-ink/40"></div>
     <div
@@ -182,11 +190,14 @@
 
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { useI18n } from "../i18n";
 import heroImage from "../../4ae103d7-a832-422e-bf58-448c1ef08c6d.jpeg";
 import iconData from "../assets/icon-data.svg";
 import iconDocument from "../assets/icon-document.svg";
 import iconExport from "../assets/icon-export.svg";
 import iconCommunity from "../assets/icon-community.svg";
+
+const { t } = useI18n();
 
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;

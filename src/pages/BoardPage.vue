@@ -22,6 +22,26 @@
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div
+          v-for="member in boardMembers"
+          :key="member.id"
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
+          <img
+            v-if="member.image_url"
+            :src="`http://localhost:3001${member.image_url}`"
+            :alt="member.name"
+            class="h-16 w-16 rounded-full object-cover"
+          />
+          <div v-else class="h-16 w-16 rounded-full bg-white/10"></div>
+          <p class="mt-4 text-lg font-semibold">{{ member.name }}</p>
+          <p class="text-xs text-mist/60 mt-1">{{ member.position }}</p>
+          <p v-if="member.description" class="mt-2 text-sm text-mist/70">{{ member.description }}</p>
+        </div>
+        
+        <div
+          v-if="boardMembers.length === 0"
           class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
@@ -30,37 +50,40 @@
           <p class="mt-4 text-lg font-semibold">{{ t("board.chair.title") }}</p>
           <p class="text-sm text-mist/70">{{ t("board.chair.body") }}</p>
         </div>
-        <div
-          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
-          @mousemove="setSpotlight"
-          @mouseleave="clearSpotlight"
-        >
-          <div class="h-16 w-16 rounded-full bg-white/10"></div>
-          <p class="mt-4 text-lg font-semibold">
-            {{ t("board.director.title") }}
-          </p>
-          <p class="text-sm text-mist/70">{{ t("board.director.body") }}</p>
-        </div>
-        <div
-          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
-          @mousemove="setSpotlight"
-          @mouseleave="clearSpotlight"
-        >
-          <div class="h-16 w-16 rounded-full bg-white/10"></div>
-          <p class="mt-4 text-lg font-semibold">
-            {{ t("board.lawyer.title") }}
-          </p>
-          <p class="text-sm text-mist/70">{{ t("board.lawyer.body") }}</p>
-        </div>
       </div>
     </div>
   </section>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'BoardPage'
+}
+</script>
+
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
+import { boardApi } from "../services/api";
 
 const { t } = useI18n();
+const boardMembers = ref<any[]>([]);
+
+const loadBoard = async () => {
+  try {
+    const response = await boardApi.getAll();
+    if (response.success && response.data) {
+      boardMembers.value = response.data;
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки правления:', error);
+  }
+};
+
+onMounted(() => {
+  loadBoard();
+});
+
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

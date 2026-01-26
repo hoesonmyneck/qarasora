@@ -20,6 +20,30 @@
       </div>
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div
+          v-if="contacts"
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
+          <img
+            v-if="contacts.image_url"
+            :src="`http://localhost:3001${contacts.image_url}`"
+            alt="Контакты"
+            class="w-full h-48 object-cover rounded-2xl mb-4"
+          />
+          <p class="text-lg font-semibold">{{ contacts.title || t("contacts.office.title") }}</p>
+          <p class="mt-3 text-sm text-mist/70">
+            {{ t("contacts.office.body") }}
+          </p>
+          <div class="mt-6 space-y-3 text-sm text-mist/70">
+            <p v-if="contacts.address">📍 {{ contacts.address }}</p>
+            <p v-if="contacts.phone">📞 {{ contacts.phone }}</p>
+            <p v-if="contacts.telegram">📱 {{ contacts.telegram }}</p>
+            <p v-if="contacts.email">📧 {{ contacts.email }}</p>
+          </div>
+        </div>
+        <div
+          v-else
           class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
           @mousemove="setSpotlight"
           @mouseleave="clearSpotlight"
@@ -39,10 +63,35 @@
   </section>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'ContactsPage'
+}
+</script>
+
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
+import { contactsApi } from "../services/api";
 
 const { t } = useI18n();
+const contacts = ref<any>(null);
+
+const loadContacts = async () => {
+  try {
+    const response = await contactsApi.get();
+    if (response.success && response.data) {
+      contacts.value = response.data;
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки контактов:', error);
+  }
+};
+
+onMounted(() => {
+  loadContacts();
+});
+
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

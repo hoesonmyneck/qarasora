@@ -11,7 +11,8 @@
     <img
       :src="industryImage"
       :alt="t('industry.image.alt')"
-      class="pointer-events-none absolute right-10 top-16 h-55 w-120 rounded-3xl border border-white/10 object-cover shadow-soft parallax-layer"
+      class="pointer-events-none absolute top-16 h-55 left-280  w-120 rounded-3xl border border-white/10 object-cover shadow-soft parallax-layer"
+      style="right: calc(2.5rem + 100px);"
       data-parallax
       data-speed="0.06"
     />

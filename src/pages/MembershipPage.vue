@@ -69,35 +69,42 @@
             </p>
           </div>
         </div>
-        <form class="bg-[#E07A2B] rounded-3xl p-6">
+        <form class="bg-[#E07A2B] rounded-3xl p-6" @submit.prevent="handleSubmit">
           <p class="text-lg font-semibold">{{ t("membership.form.title") }}</p>
           <div class="mt-4 space-y-4 text-sm text-mist/70">
             <input
+              v-model="formData.name"
               type="text"
               :placeholder="t('membership.form.name')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
+              required
             />
             <input
+              v-model="formData.contact"
               type="text"
               :placeholder="t('membership.form.contact')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
+              required
             />
             <input
+              v-model="formData.region"
               type="text"
               :placeholder="t('membership.form.region')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
             <input
+              v-model="formData.area"
               type="text"
               :placeholder="t('membership.form.area')"
               class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
             />
           </div>
           <button
-            type="button"
+            type="submit"
             class="mt-6 w-full bg-black rounded-full bg-hemp px-6 py-3 text-sm font-semibold text-ink shadow-soft transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(91,126,61,0.6)]"
+            :disabled="isSubmitting"
           >
-            {{ t("membership.form.submit") }}
+            {{ isSubmitting ? 'Отправка...' : t("membership.form.submit") }}
           </button>
           <p class="mt-4 text-xs text-mist/60">
             {{ t("membership.form.note") }}
@@ -109,9 +116,51 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "../i18n";
+import { applicationsApi } from "../services/api";
 
 const { t } = useI18n();
+
+const formData = ref({
+  name: '',
+  contact: '',
+  region: '',
+  area: ''
+});
+
+const isSubmitting = ref(false);
+
+const handleSubmit = async () => {
+  if (isSubmitting.value) return;
+  
+  try {
+    isSubmitting.value = true;
+    
+    const response = await applicationsApi.create(
+      formData.value.name,
+      formData.value.contact,
+      formData.value.region,
+      formData.value.area
+    );
+    
+    if (response.success) {
+      alert('Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+      // Очистка формы
+      formData.value = {
+        name: '',
+        contact: '',
+        region: '',
+        area: ''
+      };
+    }
+  } catch (error: any) {
+    alert(error.message || 'Ошибка при отправке заявки. Попробуйте позже.');
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();

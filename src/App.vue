@@ -258,7 +258,11 @@ onUnmounted(() => {
     </div>
 
     <main class="flex-1 pt-24">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <keep-alive include="EventsPage,BoardPage,ContactsPage">
+          <component :is="Component" />
+        </keep-alive>
+      </RouterView>
     </main>
 
     <footer class="border-t border-white/10 px-6 py-8 text-sm text-mist/60">

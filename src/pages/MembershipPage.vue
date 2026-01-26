@@ -1,14 +1,14 @@
 <template>
   <section class="relative overflow-hidden px-6 py-20">
     <div
-      class="pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-white/5 via-transparent to-transparent"
+      class="pointer-events-none fixed inset-x-0 top-0 z-0 h-[50vh] bg-gradient-to-b from-white/5 via-transparent to-transparent"
     ></div>
     <div
       class="pointer-events-none absolute right-10 top-16 h-72 w-72 rounded-full bg-clay/25 blur-3xl parallax-layer"
       data-parallax
       data-speed="0.14"
     ></div>
-    <div class="mx-auto max-w-7xl space-y-10">
+    <div class="relative z-10 mx-auto max-w-7xl space-y-10">
       <div class="space-y-3">
         <p class="text-sm uppercase tracking-[0.2em] text-mist/60">
           Членство и выгода
@@ -23,25 +23,41 @@
       </div>
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div class="grid gap-6 md:grid-cols-2">
-          <div class="glass rounded-3xl p-6">
+          <div
+            class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+            @mousemove="setSpotlight"
+            @mouseleave="clearSpotlight"
+          >
             <p class="text-lg font-semibold">Живая база данных</p>
             <p class="mt-3 text-sm text-mist/70">
               Онлайн-карта с результатами и вызовами хозяйств участников.
             </p>
           </div>
-          <div class="glass rounded-3xl p-6">
+          <div
+            class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+            @mousemove="setSpotlight"
+            @mouseleave="clearSpotlight"
+          >
             <p class="text-lg font-semibold">Библиотека первых шагов</p>
             <p class="mt-3 text-sm text-mist/70">
               Шаблоны договоров и заявок на лицензию.
             </p>
           </div>
-          <div class="glass rounded-3xl p-6">
+          <div
+            class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+            @mousemove="setSpotlight"
+            @mouseleave="clearSpotlight"
+          >
             <p class="text-lg font-semibold">Организация экспорта</p>
             <p class="mt-3 text-sm text-mist/70">
               Поиск покупателей и логистика за рубежом.
             </p>
           </div>
-          <div class="glass rounded-3xl p-6">
+          <div
+            class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+            @mousemove="setSpotlight"
+            @mouseleave="clearSpotlight"
+          >
             <p class="text-lg font-semibold">Закрытые мероприятия</p>
             <p class="mt-3 text-sm text-mist/70">
               Практические воркшопы и вебинары с экспертами.
@@ -86,3 +102,23 @@
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+const setSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+
+const clearSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+</script>

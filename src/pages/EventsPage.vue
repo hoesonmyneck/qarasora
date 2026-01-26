@@ -18,7 +18,11 @@
           Формируем календарь практик и создаем площадки для решений.
         </p>
       </div>
-      <div class="glass rounded-3xl p-6 lg:flex lg:items-center lg:justify-between">
+      <div
+        class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02] lg:flex lg:items-center lg:justify-between"
+        @mousemove="setSpotlight"
+        @mouseleave="clearSpotlight"
+      >
         <div class="space-y-3">
           <div class="inline-flex items-center gap-2 rounded-full bg-hemp/20 px-3 py-1 text-xs font-semibold text-mist">
             Закрепленная новость
@@ -37,7 +41,11 @@
       </div>
 
       <div class="grid gap-5 lg:grid-cols-2">
-        <article class="glass rounded-3xl p-6">
+        <article
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
             12 ноября 2026
           </p>
@@ -49,7 +57,11 @@
             ограничены.
           </p>
         </article>
-        <article class="glass rounded-3xl p-6">
+        <article
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
             28 октября 2026
           </p>
@@ -61,7 +73,11 @@
             соответствию.
           </p>
         </article>
-        <article class="glass rounded-3xl p-6">
+        <article
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
             10 октября 2026
           </p>
@@ -72,7 +88,11 @@
             Доступны новые маршруты для экспорта волокна и семян.
           </p>
         </article>
-        <article class="glass rounded-3xl p-6">
+        <article
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-xs uppercase tracking-[0.2em] text-mist/60">
             22 сентября 2026
           </p>
@@ -87,3 +107,23 @@
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+const setSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+
+const clearSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+</script>

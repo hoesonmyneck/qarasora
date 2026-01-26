@@ -86,7 +86,10 @@ const setSpotlight = (event: MouseEvent) => {
 
 const clearSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
-  target.style.removeProperty("--x");
-  target.style.removeProperty("--y");
+  const rect = target.getBoundingClientRect();
+  const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
 };
 </script>

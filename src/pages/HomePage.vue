@@ -45,15 +45,33 @@
           </div>
           <div class="section-divider"></div>
           <div class="mt-6 grid gap-4 text-sm text-mist/70 md:grid-cols-3">
-            <div class="glass rounded-2xl px-4 py-3">Строгий деловой формат</div>
-            <div class="glass rounded-2xl px-4 py-3">Реальные данные полей</div>
-            <div class="glass rounded-2xl px-4 py-3">Легальная поддержка</div>
+            <div
+              class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
+              @mousemove="setSpotlight"
+              @mouseleave="clearSpotlight"
+            >
+              Строгий деловой формат
+            </div>
+            <div
+              class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
+              @mousemove="setSpotlight"
+              @mouseleave="clearSpotlight"
+            >
+              Реальные данные полей
+            </div>
+            <div
+              class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
+              @mousemove="setSpotlight"
+              @mouseleave="clearSpotlight"
+            >
+              Легальная поддержка
+            </div>
           </div>
         </div>
       </div>
       <div class="relative">
         <div class="glass rounded-[28px] p-8 shadow-soft">
-          <p class="text-base uppercase text-mist/60">Ассоциация — это</p>
+          <p class="text-base uppercase text-mist/60 cursor-default">Ассоциация — это</p>
           <div class="mt-6 space-y-5">
             <div
               class="spotlight-card rounded-2xl border border-white/10 p-5 transition hover:scale-[1.02]"
@@ -66,7 +84,7 @@
                   alt="График"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
-                <div>
+                <div class="cursor-default">
                   <p class="text-base font-semibold">Доступ к данным</p>
                   <p class="text-sm text-mist/70 md:text-base">
                     Живая база реального опыта с казахстанских полей.
@@ -85,7 +103,7 @@
                   alt="Документ"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
-                <div>
+                <div class="cursor-default">
                   <p class="text-base font-semibold">Снижение рисков</p>
                   <p class="text-sm text-mist/70 md:text-base">
                     Готовые документы и юридическая поддержка.
@@ -104,7 +122,7 @@
                   alt="Экспорт"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
-                <div>
+                <div class="cursor-default">
                   <p class="text-base font-semibold">Экспорт</p>
                   <p class="text-sm text-mist/70 md:text-base">
                     Организация продаж и логистики за рубеж.
@@ -123,7 +141,7 @@
                   alt="Сообщество"
                   class="h-16 w-16 rounded-2xl bg-white/10 p-3"
                 />
-                <div>
+                <div class="cursor-default">
                   <p class="text-base font-semibold">Сообщество</p>
                   <p class="text-sm text-mist/70 md:text-base">
                     Закрытые встречи с экспертами и коллегами.
@@ -181,7 +199,10 @@ const setSpotlight = (event: MouseEvent) => {
 
 const clearSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;
-  target.style.removeProperty("--x");
-  target.style.removeProperty("--y");
+  const rect = target.getBoundingClientRect();
+  const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
 };
 </script>

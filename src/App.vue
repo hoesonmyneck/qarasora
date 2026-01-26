@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 
 const navLinks = [
@@ -15,6 +15,7 @@ const navLinks = [
 const languages = ["RU", "KZ", "EN"] as const;
 const activeLang = ref<(typeof languages)[number]>("RU");
 const isLangOpen = ref(false);
+const langMenuRef = ref<HTMLElement | null>(null);
 const isMobileMenuOpen = ref(false);
 const route = useRoute();
 
@@ -38,7 +39,21 @@ const refreshLayers = () => {
   update();
 };
 
-onMounted(() => {
+const scheduleRefresh = () => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(refreshLayers);
+  });
+};
+
+const handleDocumentClick = (event: MouseEvent) => {
+  if (!isLangOpen.value) return;
+  const target = event.target as Node;
+  if (langMenuRef.value && !langMenuRef.value.contains(target)) {
+    isLangOpen.value = false;
+  }
+};
+
+onMounted(async () => {
   let ticking = false;
 
   update = () => {
@@ -69,26 +84,32 @@ onMounted(() => {
     }
   };
 
-  refreshLayers();
+  await nextTick();
+  scheduleRefresh();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", update);
+  window.addEventListener("load", scheduleRefresh);
+  document.addEventListener("click", handleDocumentClick);
 });
 
 watch(
   () => route.fullPath,
-  () => {
-    requestAnimationFrame(refreshLayers);
+  async () => {
+    await nextTick();
+    scheduleRefresh();
   }
 );
 
 onUnmounted(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", update);
+  window.removeEventListener("load", scheduleRefresh);
+  document.removeEventListener("click", handleDocumentClick);
 });
 </script>
 
 <template>
-  <div class="min-h-screen text-white">
+  <div class="flex min-h-screen flex-col text-white">
     <header
       class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink"
       style="background-color: #0b1410"
@@ -125,7 +146,7 @@ onUnmounted(() => {
           >
             <span class="text-lg">☰</span>
           </button>
-          <div class="relative">
+          <div ref="langMenuRef" class="relative">
             <button
               type="button"
               class="flex w-[56px] items-center justify-between rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-semibold text-white"
@@ -234,7 +255,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <main class="pt-24">
+    <main class="flex-1 pt-24">
       <RouterView />
     </main>
 

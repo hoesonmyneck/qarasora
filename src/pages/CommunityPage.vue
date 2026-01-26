@@ -22,26 +22,42 @@
         </p>
       </div>
       <div class="grid gap-6 lg:grid-cols-3">
-        <div class="glass rounded-3xl p-6">
+        <div
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-lg font-semibold">Закрытый чат</p>
           <p class="mt-3 text-sm text-mist/70">
             Основная площадка для ежедневного обмена опытом.
           </p>
         </div>
-        <div class="glass rounded-3xl p-6">
+        <div
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-lg font-semibold">Экспертный совет</p>
           <p class="mt-3 text-sm text-mist/70">
             Агрономы, юристы и логисты с проверенной практикой.
           </p>
         </div>
-        <div class="glass rounded-3xl p-6">
+        <div
+          class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02]"
+          @mousemove="setSpotlight"
+          @mouseleave="clearSpotlight"
+        >
           <p class="text-lg font-semibold">Партнеры</p>
           <p class="mt-3 text-sm text-mist/70">
             Лаборатории, поставщики семян, перерабатывающие компании.
           </p>
         </div>
       </div>
-      <div class="glass rounded-3xl p-6 lg:flex lg:items-center lg:justify-between">
+      <div
+        class="glass spotlight-card rounded-3xl p-6 transition hover:scale-[1.02] lg:flex lg:items-center lg:justify-between"
+        @mousemove="setSpotlight"
+        @mouseleave="clearSpotlight"
+      >
         <div class="space-y-2">
           <p class="text-lg font-semibold">Личный кабинет участника</p>
           <p class="text-sm text-mist/70">
@@ -58,3 +74,23 @@
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+const setSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+
+const clearSpotlight = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+  const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+  target.style.setProperty("--x", `${x}px`);
+  target.style.setProperty("--y", `${y}px`);
+};
+</script>

@@ -122,7 +122,7 @@ onUnmounted(() => {
           </div>
           <div>
             <p class="w-[260px] truncate text-lg font-semibold tracking-wide">
-              {{ logoTitle }}
+              Qarasora<span class="hidden lg:inline">{{ logoSuffix }}</span>
             </p>
             <p class="text-xs uppercase text-mist/60">{{ t("brand.subtitle") }}</p>
           </div>
@@ -138,15 +138,7 @@ onUnmounted(() => {
             {{ t(link.labelKey) }}
           </RouterLink>
         </nav>
-        <div class="flex items-center gap-3">
-          <button
-            type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white lg:hidden"
-            @click="isMobileMenuOpen = !isMobileMenuOpen"
-            :aria-label="t('menu.open')"
-          >
-            <span class="text-lg">☰</span>
-          </button>
+        <div class="flex items-center gap-3 -translate-x-[80px] lg:translate-x-0">
           <div ref="langMenuRef" class="relative">
             <button
               type="button"
@@ -178,9 +170,17 @@ onUnmounted(() => {
               </button>
             </div>
           </div>
+          <button
+            type="button"
+            class="flex h-[60px] w-[60px] items-center justify-center rounded-full border border-white/10 bg-black/40 text-white lg:hidden"
+            @click="isMobileMenuOpen = !isMobileMenuOpen"
+            :aria-label="t('menu.open')"
+          >
+            <span class="text-3xl">☰</span>
+          </button>
           <RouterLink
             to="/portal"
-            class="flex items-center gap-2 rounded-full bg-[#E07A2B] px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(224,122,43,0.75)]"
+            class="hidden lg:flex items-center gap-2 rounded-full bg-[#E07A2B] px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(224,122,43,0.75)]"
           >
             <svg
               width="16"
@@ -204,22 +204,22 @@ onUnmounted(() => {
       </div>
     </header>
 
-    <div class="fixed inset-0 z-40 lg:hidden">
+    <div class="fixed inset-0 z-40 lg:hidden" :class="isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'">
       <div
-        class="absolute inset-0 bg-black/50 transition-opacity duration-200"
+        class="absolute inset-0 bg-black/50 transition-opacity duration-200 pointer-events-auto"
         :class="isMobileMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'"
         @click="isMobileMenuOpen = false"
       ></div>
       <div
-        class="absolute left-0 right-0 top-20 border-b border-white/10 bg-ink px-6 py-5 shadow-soft transition-all duration-200"
-        style="background-color: #0b1410"
+        class="absolute left-0 right-0 top-20 border-b border-white/10 bg-ink px-6 py-5 shadow-soft transition-all duration-200 pointer-events-auto"
+        style="background-color: #0b1410; padding-left: 19px"
         :class="
           isMobileMenuOpen
             ? 'translate-y-0 opacity-100'
             : 'pointer-events-none -translate-y-3 opacity-0'
         "
       >
-        <nav class="flex flex-col gap-4 text-sm text-mist/70">
+        <nav class="flex flex-col gap-4 text-sm text-mist/70" style="margin-left: -5px">
           <RouterLink
             v-for="link in navLinks"
             :key="link.to"

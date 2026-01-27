@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div v-else class="grid min-h-[70vh] gap-6 lg:grid-cols-[220px_1fr] overflow-x-hidden">
+      <div v-else class="grid min-h-[40vh] lg:min-h-[70vh] gap-6 lg:grid-cols-[220px_1fr] overflow-x-hidden">
         <aside class="glass rounded-3xl p-4 !overflow-visible">
           <div class="flex items-center gap-2 text-sm font-semibold text-mist/70">
             <span>☰</span>
@@ -285,7 +285,7 @@
                   <div
                     v-for="farm in farms"
                     :key="farm.id"
-                    class="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
+                    class="flex flex-col lg:flex-row lg:items-center lg:justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5 gap-3"
                   >
                     <div class="flex-1 min-w-0 max-w-full">
                       <p class="text-sm font-medium force-text-wrap">{{ farm.name }}</p>
@@ -373,7 +373,7 @@
                   <div
                     v-for="doc in documents"
                     :key="doc.id"
-                    class="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
+                    class="flex flex-col lg:flex-row lg:items-center lg:justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5 gap-3"
                   >
                     <div class="flex-1 min-w-0 max-w-full">
                       <p class="text-sm font-medium force-text-wrap">{{ doc.name }}</p>
@@ -381,7 +381,7 @@
                         {{ (doc.size / 1024).toFixed(2) }} KB · {{ new Date(doc.created_at).toLocaleDateString('ru-RU') }}
                       </p>
                     </div>
-                    <div class="flex gap-2 flex-shrink-0">
+                    <div class="flex gap-2 flex-shrink-0 flex-wrap">
                       <button
                         type="button"
                         class="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold hover:bg-white/5"
@@ -483,7 +483,7 @@
                     :key="news.id"
                     class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
                   >
-                    <div class="flex items-start justify-between gap-2">
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                       <div class="flex-1 min-w-0 max-w-full">
                         <p class="text-sm font-medium force-text-wrap">{{ news.title }}</p>
                         <p class="text-xs text-mist/60 mt-1">
@@ -493,7 +493,7 @@
                           {{ news.detail }}
                         </p>
                       </div>
-                      <div class="flex gap-2 flex-shrink-0">
+                      <div class="flex gap-2 flex-shrink-0 flex-wrap">
                         <button
                           type="button"
                           :class="[
@@ -580,7 +580,7 @@
                   <div
                     v-for="user in users"
                     :key="user.id"
-                    class="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
+                    class="flex flex-col lg:flex-row lg:items-center lg:justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5 gap-3"
                   >
                     <div class="flex-1 min-w-0 max-w-full">
                       <p class="text-sm font-medium force-text-wrap">{{ user.username }}</p>
@@ -632,7 +632,7 @@
                     :key="application.id"
                     class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
                   >
-                    <div class="flex items-start justify-between gap-2">
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                       <div class="flex-1 min-w-0 max-w-full">
                         <p class="text-sm font-medium force-text-wrap">{{ application.name }}</p>
                         <p class="text-xs text-mist/60 mt-1 force-text-wrap">
@@ -661,7 +661,7 @@
                           </span>
                         </div>
                       </div>
-                      <div class="flex flex-col gap-2 flex-shrink-0">
+                      <div class="flex gap-2 flex-shrink-0 flex-wrap">
                         <button
                           v-if="application.status !== 'approved'"
                           type="button"
@@ -891,7 +891,7 @@
                     :key="member.id"
                     class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 transition hover:bg-white/5"
                   >
-                    <div class="flex items-start justify-between gap-2">
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                       <div class="flex-1 min-w-0 max-w-full">
                         <p class="text-sm font-medium force-text-wrap">{{ member.name }}</p>
                         <p class="text-xs text-mist/60 mt-1 force-text-wrap">{{ member.position }}</p>
@@ -899,7 +899,7 @@
                           {{ member.description }}
                         </p>
                       </div>
-                      <div class="flex flex-col gap-2 flex-shrink-0">
+                      <div class="flex gap-2 flex-shrink-0">
                         <button
                           type="button"
                           class="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold hover:bg-white/5 whitespace-nowrap"

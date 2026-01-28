@@ -30,7 +30,7 @@
         >
           <img
             v-if="member.image_url"
-            :src="`http://localhost:3001${member.image_url}`"
+            :src="`${BACKEND_URL}${member.image_url}`"
             :alt="member.name"
             class="h-16 w-16 rounded-full object-cover"
           />
@@ -64,7 +64,7 @@ export default {
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
-import { boardApi } from "../services/api";
+import { boardApi, BACKEND_URL } from "../services/api";
 
 const { t } = useI18n();
 const boardMembers = ref<any[]>([]);

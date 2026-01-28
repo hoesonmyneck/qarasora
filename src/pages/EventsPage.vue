@@ -34,7 +34,7 @@
           </div>
           <img
             v-if="pinnedNews.image_url"
-            :src="`http://localhost:3001${pinnedNews.image_url}`"
+            :src="`${BACKEND_URL}${pinnedNews.image_url}`"
             :alt="pinnedNews.title"
             class="w-full h-64 object-cover rounded-2xl"
           />
@@ -62,7 +62,7 @@
         >
           <img
             v-if="news.image_url"
-            :src="`http://localhost:3001${news.image_url}`"
+            :src="`${BACKEND_URL}${news.image_url}`"
             :alt="news.title"
             class="w-full h-48 object-cover rounded-2xl mb-4"
           />
@@ -118,7 +118,7 @@
             
             <img
               v-if="selectedNews.image_url"
-              :src="`http://localhost:3001${selectedNews.image_url}`"
+              :src="`${BACKEND_URL}${selectedNews.image_url}`"
               :alt="selectedNews.title"
               class="w-full max-h-96 object-cover rounded-2xl"
             />
@@ -144,7 +144,7 @@ export default {
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "../i18n";
-import { newsApi } from "../services/api";
+import { newsApi, BACKEND_URL } from "../services/api";
 
 const { t } = useI18n();
 const newsItems = ref<any[]>([]);

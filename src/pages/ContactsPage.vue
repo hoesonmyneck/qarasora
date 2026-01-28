@@ -27,7 +27,7 @@
         >
           <img
             v-if="contacts.image_url"
-            :src="`http://localhost:3001${contacts.image_url}`"
+            :src="`${BACKEND_URL}${contacts.image_url}`"
             alt="Контакты"
             class="w-full h-48 object-cover rounded-2xl mb-4"
           />
@@ -72,7 +72,7 @@ export default {
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
-import { contactsApi } from "../services/api";
+import { contactsApi, BACKEND_URL } from "../services/api";
 
 const { t } = useI18n();
 const contacts = ref<any>(null);

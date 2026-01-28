@@ -193,8 +193,14 @@
               </div>
               <div
                 class="overflow-hidden transition-all duration-200"
-                :class="expandedNews.has(news.id) ? 'mt-3 max-h-96' : 'max-h-0'"
+                :class="expandedNews.has(news.id) ? 'mt-3 max-h-[600px]' : 'max-h-0'"
               >
+                <img
+                  v-if="news.image_url"
+                  :src="`${BACKEND_URL}${news.image_url}`"
+                  :alt="news.title"
+                  class="w-full h-48 object-cover rounded-xl mb-3"
+                />
                 <p class="text-xs text-mist/70 whitespace-pre-line force-text-wrap overflow-auto max-w-full">
                   {{ news.detail }}
                 </p>
@@ -249,6 +255,14 @@
                     :placeholder="t('admin.db.form.lng')"
                     class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
                   />
+                  <div class="space-y-2">
+                    <p class="text-xs text-mist/60 text-center">— или выберите точку на карте —</p>
+                    <div
+                      ref="coordMapEl"
+                      class="h-96 w-full rounded-2xl overflow-hidden border border-white/10"
+                      style="z-index: 1;"
+                    ></div>
+                  </div>
                   <textarea
                     v-model="farmForm.note"
                     :placeholder="t('admin.db.form.note')"
@@ -991,7 +1005,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import L from "leaflet";
 import { useI18n } from "../i18n";
-import { authApi, usersApi, newsApi, farmsApi, documentsApi, applicationsApi, contactsApi, boardApi, settingsApi, getToken } from "../services/api";
+import { authApi, usersApi, newsApi, farmsApi, documentsApi, applicationsApi, contactsApi, boardApi, settingsApi, getToken, BACKEND_URL } from "../services/api";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -1006,6 +1020,9 @@ const currentUser = ref<any>(null);
 
 const mapEl = ref<HTMLDivElement | null>(null);
 const mapInstance = ref<L.Map | null>(null);
+const coordMapEl = ref<HTMLDivElement | null>(null);
+const coordMapInstance = ref<L.Map | null>(null);
+const coordMarker = ref<L.Marker | null>(null);
 
 const userTabs = [
   { key: "database" as const, labelKey: "portal.tabs.database" },
@@ -1201,6 +1218,7 @@ const addFarm = async () => {
         lng: "",
         note: "",
       };
+      clearCoordMarker();
       await loadFarms();
       
       // Перерисовка карты
@@ -1320,6 +1338,8 @@ const startEditFarm = (farm: any) => {
     note: farm.note,
   };
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Обновляем маркер на карте для показа текущих координат
+  setTimeout(() => updateCoordMarker(), 100);
 };
 
 const cancelEditFarm = () => {
@@ -1332,6 +1352,7 @@ const cancelEditFarm = () => {
     lng: "",
     note: "",
   };
+  clearCoordMarker();
 };
 
 const updateFarm = async () => {
@@ -1853,6 +1874,100 @@ const updateSettings = async () => {
   }
 };
 
+// Инициализация карты для выбора координат
+const initCoordMap = () => {
+  if (!coordMapEl.value || coordMapInstance.value) return;
+  
+  const map = L.map(coordMapEl.value, {
+    zoomControl: true,
+    attributionControl: false,
+  });
+  
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+  }).addTo(map);
+  
+  // Центрируем на Казахстане
+  const kazakhstanCenter: [number, number] = [48.0, 66.9];
+  map.setView(kazakhstanCenter, 6);
+  
+  // Ограничиваем карту границами Казахстана
+  const kzBounds = L.latLngBounds([40.5, 46.0], [55.5, 87.5]);
+  map.setMaxBounds(kzBounds);
+  
+  // Обработчик клика на карту
+  map.on('click', (e: L.LeafletMouseEvent) => {
+    const { lat, lng } = e.latlng;
+    farmForm.value.lat = lat.toFixed(4);
+    farmForm.value.lng = lng.toFixed(4);
+    
+    // Удаляем старый маркер если есть
+    if (coordMarker.value) {
+      map.removeLayer(coordMarker.value);
+    }
+    
+    // Добавляем новый маркер
+    coordMarker.value = L.marker([lat, lng], {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map);
+  });
+  
+  coordMapInstance.value = map;
+};
+
+// Обновление маркера на карте при изменении координат вручную
+const updateCoordMarker = () => {
+  if (!coordMapInstance.value) return;
+  
+  const lat = parseFloat(farmForm.value.lat);
+  const lng = parseFloat(farmForm.value.lng);
+  
+  if (isNaN(lat) || isNaN(lng)) {
+    // Удаляем маркер если координаты некорректны
+    if (coordMarker.value) {
+      coordMapInstance.value.removeLayer(coordMarker.value);
+      coordMarker.value = null;
+    }
+    return;
+  }
+  
+  // Удаляем старый маркер
+  if (coordMarker.value) {
+    coordMapInstance.value.removeLayer(coordMarker.value);
+  }
+  
+  // Добавляем новый маркер
+  coordMarker.value = L.marker([lat, lng], {
+    icon: L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    })
+  }).addTo(coordMapInstance.value);
+  
+  // Центрируем карту на маркере, сохраняя текущий зум
+  const currentZoom = coordMapInstance.value.getZoom();
+  coordMapInstance.value.setView([lat, lng], currentZoom);
+};
+
+// Очистка маркера с карты
+const clearCoordMarker = () => {
+  if (coordMarker.value && coordMapInstance.value) {
+    coordMapInstance.value.removeLayer(coordMarker.value);
+    coordMarker.value = null;
+  }
+};
+
 const initMap = () => {
   if (!mapEl.value || mapInstance.value || farms.value.length === 0) return;
   const map = L.map(mapEl.value, {
@@ -1860,7 +1975,7 @@ const initMap = () => {
     attributionControl: false,
   });
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 10,
+    maxZoom: 18,
   }).addTo(map);
 
   const bounds = L.latLngBounds(
@@ -1932,6 +2047,45 @@ watch(
     await nextTick();
     initMap();
     mapInstance.value?.invalidateSize();
+  }
+);
+
+// Инициализация карты выбора координат для админа
+watch(
+  [activeTab, isAdmin],
+  async () => {
+    if (activeTab.value === "database" && isAdmin.value) {
+      await nextTick();
+      initCoordMap();
+      // Небольшая задержка для корректного определения размеров
+      setTimeout(() => {
+        coordMapInstance.value?.invalidateSize();
+      }, 100);
+    }
+  }
+);
+
+// Обновление маркера при ручном вводе координат
+watch(
+  () => [farmForm.value.lat, farmForm.value.lng],
+  () => {
+    if (coordMapInstance.value && farmForm.value.lat && farmForm.value.lng) {
+      updateCoordMarker();
+    }
+  }
+);
+
+// Центрирование карты на выбранном хозяйстве
+watch(
+  selectedFarm,
+  (newFarm) => {
+    if (newFarm && mapInstance.value) {
+      // Центрируем карту на выбранном хозяйстве с приближением
+      mapInstance.value.setView([newFarm.lat, newFarm.lng], 12, {
+        animate: true,
+        duration: 0.5
+      });
+    }
   }
 );
 

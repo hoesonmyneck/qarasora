@@ -7,8 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Создаем директорию для загрузок если её нет
-const uploadDir = process.env.UPLOAD_DIR || './uploads';
-const fullUploadPath = path.join(__dirname, '..', uploadDir);
+// На Render используем Persistent Disk, локально - относительный путь
+const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
+const fullUploadPath = path.isAbsolute(uploadDir) ? uploadDir : path.join(__dirname, '..', uploadDir);
 
 if (!fs.existsSync(fullUploadPath)) {
   fs.mkdirSync(fullUploadPath, { recursive: true });

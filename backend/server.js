@@ -51,7 +51,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Статические файлы для загруженных документов и изображений
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// На Render используем Persistent Disk, локально - относительный путь
+const uploadsPath = process.env.UPLOAD_DIR 
+  ? (path.isAbsolute(process.env.UPLOAD_DIR) ? process.env.UPLOAD_DIR : path.join(__dirname, process.env.UPLOAD_DIR))
+  : path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsPath));
 
 // Маршруты API
 app.use('/api/auth', authRoutes);

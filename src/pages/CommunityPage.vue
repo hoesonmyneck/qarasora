@@ -65,7 +65,7 @@
         </div>
         <RouterLink
           to="/portal"
-          class="mt-4 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold lg:mt-0"
+          class="mt-4 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold lg:mt-0 hidden lg:inline-block"
         >
           {{ t("community.portal.cta") }}
         </RouterLink>

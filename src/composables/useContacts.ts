@@ -18,8 +18,8 @@ export function useContacts() {
     isLoading.value = true;
     try {
       const response = await contactsApi.get();
-      if (response.success && response.data && response.data.length > 0) {
-        contacts.value = response.data[0];
+      if (response.success && response.data) {
+        contacts.value = response.data;
         isLoaded.value = true;
       }
     } catch (error) {

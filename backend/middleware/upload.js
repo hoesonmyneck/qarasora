@@ -7,9 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Создаем директорию для загрузок если её нет
-// На Render используем Persistent Disk, локально - относительный путь
-const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
-const fullUploadPath = path.isAbsolute(uploadDir) ? uploadDir : path.join(__dirname, '..', uploadDir);
+// На Render используем Persistent Disk (абсолютный путь), локально - относительный путь
+const fullUploadPath = process.env.UPLOAD_DIR 
+  ? (path.isAbsolute(process.env.UPLOAD_DIR) ? process.env.UPLOAD_DIR : path.join(__dirname, '..', process.env.UPLOAD_DIR))
+  : path.join(__dirname, '..', 'uploads');
 
 if (!fs.existsSync(fullUploadPath)) {
   fs.mkdirSync(fullUploadPath, { recursive: true });

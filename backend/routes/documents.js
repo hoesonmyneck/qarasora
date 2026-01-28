@@ -11,6 +11,14 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Функция для получения абсолютного пути к файлу
+const getAbsoluteFilePath = (filepath) => {
+  if (path.isAbsolute(filepath)) {
+    return filepath;
+  }
+  return path.join(__dirname, '..', filepath);
+};
+
 // Получение списка документов (доступно авторизованным пользователям)
 router.get('/', authenticate, async (req, res) => {
   try {
@@ -90,10 +98,11 @@ router.get('/:id/download', authenticate, async (req, res) => {
     }
 
     const document = result.rows[0];
-    const filePath = path.join(__dirname, '..', document.filepath);
+    const filePath = getAbsoluteFilePath(document.filepath);
 
     // Проверка существования файла
     if (!fs.existsSync(filePath)) {
+      console.error('Файл не найден:', filePath);
       return res.status(404).json({
         success: false,
         message: 'Файл не найден на сервере'
@@ -196,7 +205,7 @@ router.put('/:id', authenticate, requireAdmin, upload.single('file'), async (req
       const filepath = path.join(uploadDir, req.file.filename);
 
       // Удаляем старый файл
-      const oldFilePath = path.join(__dirname, '..', currentDoc.rows[0].filepath);
+      const oldFilePath = getAbsoluteFilePath(currentDoc.rows[0].filepath);
       if (fs.existsSync(oldFilePath)) {
         fs.unlinkSync(oldFilePath);
       }
@@ -255,7 +264,7 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
     }
 
     const document = result.rows[0];
-    const filePath = path.join(__dirname, '..', document.filepath);
+    const filePath = getAbsoluteFilePath(document.filepath);
 
     // Удаление файла с диска
     if (fs.existsSync(filePath)) {

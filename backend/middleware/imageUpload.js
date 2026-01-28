@@ -7,11 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Создаем папку для изображений, если её нет
-// На Render используем Persistent Disk, локально - относительный путь
-const baseUploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
-const imagesDir = path.isAbsolute(baseUploadDir) 
-  ? path.join(baseUploadDir, 'images') 
-  : path.join(__dirname, '..', baseUploadDir, 'images');
+// На Render используем Persistent Disk (абсолютный путь), локально - относительный путь
+const baseUploadDir = process.env.UPLOAD_DIR 
+  ? (path.isAbsolute(process.env.UPLOAD_DIR) ? process.env.UPLOAD_DIR : path.join(__dirname, '..', process.env.UPLOAD_DIR))
+  : path.join(__dirname, '..', 'uploads');
+const imagesDir = path.join(baseUploadDir, 'images');
 if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
 }

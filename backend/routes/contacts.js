@@ -9,6 +9,15 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Функция для получения абсолютного пути к файлу
+const getAbsoluteFilePath = (filepath) => {
+  if (!filepath) return null;
+  if (path.isAbsolute(filepath)) {
+    return filepath;
+  }
+  return path.join(__dirname, '..', filepath);
+};
+
 const router = express.Router();
 
 // Получение всех контактов (доступно всем)
@@ -49,8 +58,8 @@ router.put('/:id', authenticate, requireAdmin, imageUpload.single('image'), asyn
     // Если нужно удалить изображение
     if (removeImage === 'true') {
       if (imageUrl) {
-        const oldImagePath = path.join(__dirname, '..', imageUrl);
-        if (fs.existsSync(oldImagePath)) {
+        const oldImagePath = getAbsoluteFilePath(imageUrl);
+        if (oldImagePath && fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
@@ -61,8 +70,8 @@ router.put('/:id', authenticate, requireAdmin, imageUpload.single('image'), asyn
     if (req.file) {
       // Удаляем старое изображение
       if (imageUrl) {
-        const oldImagePath = path.join(__dirname, '..', imageUrl);
-        if (fs.existsSync(oldImagePath)) {
+        const oldImagePath = getAbsoluteFilePath(imageUrl);
+        if (oldImagePath && fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }

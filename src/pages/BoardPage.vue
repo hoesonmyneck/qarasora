@@ -62,27 +62,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
-import { boardApi, BACKEND_URL } from "../services/api";
+import { BACKEND_URL } from "../services/api";
+import { useBoard } from "../composables/useBoard";
 
 const { t } = useI18n();
-const boardMembers = ref<any[]>([]);
-
-const loadBoard = async () => {
-  try {
-    const response = await boardApi.getAll();
-    if (response.success && response.data) {
-      boardMembers.value = response.data;
-    }
-  } catch (error) {
-    console.error('Ошибка загрузки правления:', error);
-  }
-};
-
-onMounted(() => {
-  loadBoard();
-});
+const { boardMembers } = useBoard();
 
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;

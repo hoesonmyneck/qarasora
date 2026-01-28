@@ -2,6 +2,8 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 import { languages, lang, t } from "./i18n";
+import { useBoard } from "./composables/useBoard";
+import { useContacts } from "./composables/useContacts";
 
 const navLinks = [
   { to: "/", labelKey: "nav.home" },
@@ -24,6 +26,12 @@ const logoTitle = computed(() => {
   if (route.path === "/") return "Qarasora";
   const current = navLinks.find((link) => link.to === route.path);
   return current ? `Qarasora / ${t(current.labelKey)}` : "Qarasora";
+});
+
+const logoSuffix = computed(() => {
+  if (route.path === "/") return "";
+  const current = navLinks.find((link) => link.to === route.path);
+  return current ? ` / ${t(current.labelKey)}` : "";
 });
 
 let layers: HTMLElement[] = [];
@@ -52,6 +60,10 @@ const handleDocumentClick = (event: MouseEvent) => {
     isLangOpen.value = false;
   }
 };
+
+// Инициализация composables для предзагрузки
+const { loadBoard } = useBoard();
+const { loadContacts } = useContacts();
 
 onMounted(async () => {
   let ticking = false;
@@ -90,6 +102,10 @@ onMounted(async () => {
   window.addEventListener("resize", update);
   window.addEventListener("load", scheduleRefresh);
   document.addEventListener("click", handleDocumentClick);
+
+  // Предзагрузка данных для правления и контактов
+  loadBoard();
+  loadContacts();
 });
 
 watch(
@@ -259,7 +275,7 @@ onUnmounted(() => {
 
     <main class="flex-1 pt-24">
       <RouterView v-slot="{ Component }">
-        <keep-alive include="EventsPage,BoardPage,ContactsPage">
+        <keep-alive include="BoardPage,ContactsPage">
           <component :is="Component" />
         </keep-alive>
       </RouterView>

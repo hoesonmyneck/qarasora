@@ -70,27 +70,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useI18n } from "../i18n";
-import { contactsApi, BACKEND_URL } from "../services/api";
+import { BACKEND_URL } from "../services/api";
+import { useContacts } from "../composables/useContacts";
 
 const { t } = useI18n();
-const contacts = ref<any>(null);
-
-const loadContacts = async () => {
-  try {
-    const response = await contactsApi.get();
-    if (response.success && response.data) {
-      contacts.value = response.data;
-    }
-  } catch (error) {
-    console.error('Ошибка загрузки контактов:', error);
-  }
-};
-
-onMounted(() => {
-  loadContacts();
-});
+const { contacts } = useContacts();
 
 const setSpotlight = (event: MouseEvent) => {
   const target = event.currentTarget as HTMLElement;

@@ -48,13 +48,6 @@
               @mousemove="setSpotlight"
               @mouseleave="clearSpotlight"
             >
-              {{ t("home.badge.format") }}
-            </div>
-            <div
-              class="glass spotlight-card cursor-default rounded-2xl px-4 py-3"
-              @mousemove="setSpotlight"
-              @mouseleave="clearSpotlight"
-            >
               {{ t("home.badge.data") }}
             </div>
             <div

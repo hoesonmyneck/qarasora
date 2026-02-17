@@ -11,6 +11,7 @@ const navLinks = [
   { to: "/membership", labelKey: "nav.membership" },
   { to: "/community", labelKey: "nav.community" },
   { to: "/events", labelKey: "nav.events" },
+  { to: "/gallery", labelKey: "nav.gallery" },
   { to: "/board", labelKey: "nav.board" },
   { to: "/contacts", labelKey: "nav.contacts" },
 ];
@@ -133,9 +134,7 @@ onUnmounted(() => {
     >
       <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <RouterLink to="/" class="flex items-center gap-3">
-          <div class="logo-cut grid h-10 w-10 place-items-center bg-hemp/80 shadow-soft">
-            <span class="text-base font-semibold text-ink">Q</span>
-          </div>
+          <img src="/logo.jpg" alt="Qarasora" class="h-10 w-10 rounded-lg object-cover" />
           <div>
             <p class="w-[260px] truncate text-lg font-semibold tracking-wide">
               Qarasora<span class="hidden lg:inline">{{ logoSuffix }}</span>

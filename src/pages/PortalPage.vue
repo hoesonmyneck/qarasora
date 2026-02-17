@@ -540,6 +540,107 @@
             </div>
           </div>
 
+          <div v-show="activeTab === 'gallery'" class="glass rounded-3xl p-6">
+            <p class="text-lg font-semibold">{{ t("admin.gallery.title") }}</p>
+            <p class="mt-2 text-sm text-mist/70">
+              {{ t("admin.gallery.body") }}
+            </p>
+            <div class="mt-6 space-y-4">
+              <!-- Форма добавления/редактирования фото -->
+              <div class="rounded-2xl border border-white/10 bg-black/20 p-6">
+                <p class="mb-4 text-sm font-semibold">
+                  {{ editingGalleryId ? 'Редактировать фото' : t("admin.gallery.form.title") }}
+                </p>
+                <div class="grid gap-4">
+                  <input
+                    v-model="galleryForm.title"
+                    type="text"
+                    :placeholder="t('admin.gallery.form.photoTitle')"
+                    class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
+                  />
+                  <div>
+                    <label class="block text-sm text-mist/70 mb-2">{{ t("admin.gallery.form.photo") }}</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      @change="(e: any) => galleryImage = e.target.files?.[0] || null"
+                      class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm outline-none"
+                    />
+                    <div v-if="editingGalleryId && selectedGalleryItem?.image_url" class="mt-2 flex items-center gap-2">
+                      <img
+                        :src="`${BACKEND_URL}${selectedGalleryItem.image_url}`"
+                        alt="Current"
+                        class="h-16 w-16 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        @click="removeGalleryImageFlag = true; galleryImage = null"
+                        class="text-xs text-red-400 hover:text-red-300"
+                      >
+                        Удалить текущее фото
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      type="button"
+                      class="flex-1 rounded-2xl bg-hemp px-6 py-3 font-semibold transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(91,126,61,0.7)]"
+                      @click="editingGalleryId ? updateGalleryItem() : addGalleryItem()"
+                    >
+                      {{ editingGalleryId ? 'Сохранить' : t("admin.gallery.form.submit") }}
+                    </button>
+                    <button
+                      v-if="editingGalleryId"
+                      type="button"
+                      class="rounded-2xl border border-white/20 px-6 py-3 font-semibold transition hover:bg-white/5"
+                      @click="cancelEditGallery()"
+                    >
+                      Отмена
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Список фотографий -->
+              <div class="space-y-2">
+                <p class="text-sm font-semibold">{{ t("admin.gallery.list") }}</p>
+                <div v-if="galleryItems.length === 0" class="text-center text-sm text-mist/60 py-8">
+                  Фотографии не добавлены
+                </div>
+                <div v-else class="grid gap-4 md:grid-cols-3">
+                  <div
+                    v-for="item in galleryItems"
+                    :key="item.id"
+                    class="rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/5"
+                  >
+                    <img
+                      v-if="item.image_url"
+                      :src="`${BACKEND_URL}${item.image_url}`"
+                      :alt="item.title"
+                      class="w-full h-32 object-cover rounded-xl mb-3"
+                    />
+                    <p v-if="item.title" class="text-sm font-medium mb-2">{{ item.title }}</p>
+                    <p class="text-xs text-mist/60 mb-3">{{ new Date(item.created_at).toLocaleDateString('ru-RU') }}</p>
+                    <div class="flex gap-2">
+                      <button
+                        class="flex-1 rounded-xl bg-white/10 px-3 py-2 text-xs transition hover:bg-white/20"
+                        @click="startEditGallery(item)"
+                      >
+                        Редактировать
+                      </button>
+                      <button
+                        class="rounded-xl bg-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/30"
+                        @click="deleteGalleryItem(item.id)"
+                      >
+                        Удалить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div v-show="activeTab === 'accounts'" class="glass rounded-3xl p-6">
             <p class="text-lg font-semibold">{{ t("admin.accounts.title") }}</p>
             <p class="mt-2 text-sm text-mist/70">
@@ -1005,7 +1106,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import L from "leaflet";
 import { useI18n } from "../i18n";
-import { authApi, usersApi, newsApi, farmsApi, documentsApi, applicationsApi, contactsApi, boardApi, settingsApi, getToken, BACKEND_URL } from "../services/api";
+import { authApi, usersApi, newsApi, farmsApi, documentsApi, applicationsApi, contactsApi, boardApi, settingsApi, galleryApi, getToken, BACKEND_URL } from "../services/api";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -1034,6 +1135,7 @@ const adminTabs = [
   { key: "database" as const, labelKey: "admin.tabs.database" },
   { key: "documents" as const, labelKey: "admin.tabs.documents" },
   { key: "calendar" as const, labelKey: "admin.tabs.calendar" },
+  { key: "gallery" as const, labelKey: "admin.tabs.gallery" },
   { key: "accounts" as const, labelKey: "admin.tabs.accounts" },
   { key: "applications" as const, labelKey: "admin.tabs.applications" },
   { key: "contacts" as const, labelKey: "admin.tabs.contacts" },
@@ -1043,7 +1145,7 @@ const adminTabs = [
 
 const tabs = computed(() => (isAdmin.value ? adminTabs : userTabs));
 
-const activeTab = ref<"database" | "documents" | "calendar" | "accounts" | "applications" | "contacts" | "board" | "settings">("database");
+const activeTab = ref<"database" | "documents" | "calendar" | "gallery" | "accounts" | "applications" | "contacts" | "board" | "settings">("database");
 
 const newsItems = ref<any[]>([]);
 const expandedNews = ref<Set<number>>(new Set());
@@ -1133,6 +1235,16 @@ const newsForm = ref({
 });
 
 const newsImage = ref<File | null>(null);
+
+const galleryForm = ref({
+  title: "",
+});
+
+const galleryImage = ref<File | null>(null);
+const galleryItems = ref<any[]>([]);
+const editingGalleryId = ref<number | null>(null);
+const selectedGalleryItem = ref<any>(null);
+const removeGalleryImageFlag = ref(false);
 const removeNewsImage = ref(false);
 const editingNewsId = ref<number | null>(null);
 const users = ref<any[]>([]);
@@ -1738,6 +1850,97 @@ const loadBoard = async () => {
   }
 };
 
+const loadGallery = async () => {
+  try {
+    const response = await galleryApi.getAll();
+    if (response.success && response.data) {
+      galleryItems.value = response.data;
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки галереи:', error);
+  }
+};
+
+const addGalleryItem = async () => {
+  if (!galleryImage.value) {
+    alert('Выберите изображение');
+    return;
+  }
+
+  try {
+    const response = await galleryApi.create(
+      galleryForm.value.title,
+      galleryImage.value
+    );
+
+    if (response.success) {
+      alert('Фото успешно добавлено!');
+      galleryForm.value.title = '';
+      galleryImage.value = null;
+      // Сбрасываем input файла
+      const fileInput = document.querySelector('input[type="file"][accept="image/*"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+      await loadGallery();
+    }
+  } catch (error: any) {
+    alert(error.message || 'Ошибка при добавлении фото');
+  }
+};
+
+const startEditGallery = (item: any) => {
+  editingGalleryId.value = item.id;
+  selectedGalleryItem.value = item;
+  galleryForm.value.title = item.title || '';
+  galleryImage.value = null;
+  removeGalleryImageFlag.value = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const cancelEditGallery = () => {
+  editingGalleryId.value = null;
+  selectedGalleryItem.value = null;
+  galleryForm.value.title = '';
+  galleryImage.value = null;
+  removeGalleryImageFlag.value = false;
+  const fileInput = document.querySelector('input[type="file"][accept="image/*"]') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+};
+
+const updateGalleryItem = async () => {
+  if (!editingGalleryId.value) return;
+
+  try {
+    const response = await galleryApi.update(
+      editingGalleryId.value,
+      galleryForm.value.title,
+      galleryImage.value || undefined,
+      removeGalleryImageFlag.value
+    );
+
+    if (response.success) {
+      alert('Фото успешно обновлено!');
+      cancelEditGallery();
+      await loadGallery();
+    }
+  } catch (error: any) {
+    alert(error.message || 'Ошибка при обновлении фото');
+  }
+};
+
+const deleteGalleryItem = async (id: number) => {
+  if (!confirm('Вы уверены, что хотите удалить это фото?')) return;
+
+  try {
+    const response = await galleryApi.delete(id);
+    if (response.success) {
+      alert('Фото успешно удалено!');
+      await loadGallery();
+    }
+  } catch (error: any) {
+    alert(error.message || 'Ошибка при удалении фото');
+  }
+};
+
 const createBoardMember = async () => {
   if (!boardForm.value.name || !boardForm.value.position) {
     alert('Заполните имя и должность');
@@ -2019,6 +2222,7 @@ const loadAllData = async () => {
         await loadApplications();
         await loadContacts();
         await loadBoard();
+        await loadGallery();
       }
       await loadSettings();
     }

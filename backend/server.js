@@ -14,6 +14,7 @@ import applicationRoutes from './routes/applications.js';
 import contactsRoutes from './routes/contacts.js';
 import boardRoutes from './routes/board.js';
 import settingsRoutes from './routes/settings.js';
+import galleryRoutes from './routes/gallery.js';
 
 dotenv.config();
 
@@ -67,6 +68,7 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/contacts', contactsRoutes);
 app.use('/api/board', boardRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 // Базовый маршрут
 app.get('/', (req, res) => {
@@ -83,7 +85,8 @@ app.get('/', (req, res) => {
       applications: '/api/applications',
       contacts: '/api/contacts',
       board: '/api/board',
-      settings: '/api/settings'
+      settings: '/api/settings',
+      gallery: '/api/gallery'
     }
   });
 });

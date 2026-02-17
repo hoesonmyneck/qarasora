@@ -14,6 +14,7 @@
     "migrate:images": "node scripts/addImageFields.js",
     "migrate:board-image": "node scripts/addBoardImageField.js",
     "migrate:settings": "node scripts/addSettings.js",
+    "migrate:gallery": "node scripts/addGallery.js",
     "check-news": "node scripts/checkNews.js"
   },
   "keywords": ["express", "api", "qarasora"],

@@ -467,4 +467,64 @@ export const settingsApi = {
   },
 };
 
+// Галерея
+export const galleryApi = {
+  async getAll() {
+    return fetchApi('/gallery');
+  },
+
+  async create(title: string, image: File) {
+    const formData = new FormData();
+    if (title) formData.append('title', title);
+    formData.append('image', image);
+
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/gallery`, {
+      method: 'POST',
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Ошибка запроса');
+    }
+
+    return response.json();
+  },
+
+  async update(id: number, title: string, image?: File, removeImage?: boolean) {
+    const formData = new FormData();
+    if (title) formData.append('title', title);
+    if (removeImage) formData.append('removeImage', 'true');
+    if (image) {
+      formData.append('image', image);
+    }
+
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Ошибка запроса');
+    }
+
+    return response.json();
+  },
+
+  async delete(id: number) {
+    return fetchApi(`/gallery/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export { getToken, saveToken, removeToken };

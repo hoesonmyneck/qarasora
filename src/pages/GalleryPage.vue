@@ -24,11 +24,11 @@
       <!-- Модальное окно для просмотра изображения -->
       <div
         v-if="selectedImage"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
         @click="closeModal"
       >
         <button
-          class="absolute right-4 top-4 text-4xl text-white hover:text-mist/70 transition"
+          class="absolute right-4 top-4 z-10 text-4xl text-white hover:text-mist/70 transition"
           @click="closeModal"
         >
           ×
@@ -36,10 +36,10 @@
         <img
           :src="`${BACKEND_URL}${selectedImage.image_url}`"
           :alt="selectedImage.title"
-          class="max-h-[90vh] max-w-full object-contain rounded-2xl"
+          class="max-h-full max-w-full object-contain"
           @click.stop
         />
-        <div v-if="selectedImage.title" class="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 px-6 py-3 rounded-full">
+        <div v-if="selectedImage.title" class="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 px-6 py-3 rounded-full z-10">
           <p class="text-white text-sm">{{ selectedImage.title }}</p>
         </div>
       </div>

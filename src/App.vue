@@ -142,7 +142,7 @@ onUnmounted(() => {
             <p class="text-xs uppercase text-mist/60">{{ t("brand.subtitle") }}</p>
           </div>
         </RouterLink>
-        <nav class="hidden items-center gap-6 text-sm text-mist/70 lg:flex -translate-x-8">
+        <nav class="hidden items-center gap-5 text-sm text-mist/70 lg:flex">
           <RouterLink
             v-for="link in navLinks"
             :key="link.to"
@@ -153,7 +153,7 @@ onUnmounted(() => {
             {{ t(link.labelKey) }}
           </RouterLink>
         </nav>
-        <div class="flex items-center gap-3 -translate-x-[80px] lg:translate-x-0">
+        <div class="flex items-center gap-3 -translate-x-[10px] lg:translate-x-0">
           <div ref="langMenuRef" class="relative">
             <button
               type="button"
@@ -195,7 +195,7 @@ onUnmounted(() => {
           </button>
           <RouterLink
             to="/portal"
-            class="hidden lg:flex items-center gap-2 rounded-full bg-[#E07A2B] px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(224,122,43,0.75)]"
+            class="hidden lg:flex items-center gap-2 rounded-full bg-[#E07A2B] px-3 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(224,122,43,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(224,122,43,0.75)]"
           >
             <svg
               width="16"

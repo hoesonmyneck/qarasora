@@ -153,7 +153,7 @@ onUnmounted(() => {
             {{ t(link.labelKey) }}
           </RouterLink>
         </nav>
-        <div class="flex items-center gap-3 -translate-x-[10px] lg:translate-x-0">
+        <div class="flex items-center gap-3 -translate-x-[15px] lg:translate-x-0">
           <div ref="langMenuRef" class="relative">
             <button
               type="button"

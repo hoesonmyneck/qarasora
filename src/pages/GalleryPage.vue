@@ -24,7 +24,8 @@
       <!-- Модальное окно для просмотра изображения -->
       <div
         v-if="selectedImage"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
+        class="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-black min-h-screen w-screen"
+        style="margin: 0; padding: 0;"
         @click="closeModal"
       >
         <button
@@ -36,7 +37,7 @@
         <img
           :src="`${BACKEND_URL}${selectedImage.image_url}`"
           :alt="selectedImage.title"
-          class="max-h-full max-w-full object-contain"
+          class="max-h-screen max-w-full object-contain"
           @click.stop
         />
         <div v-if="selectedImage.title" class="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 px-6 py-3 rounded-full z-10">

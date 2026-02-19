@@ -1300,10 +1300,23 @@ const handleLogout = async () => {
   } catch (error) {
     console.error('Ошибка выхода:', error);
   }
+
+  // Уничтожаем карту чтобы она переинициализировалась при следующем входе
+  if (mapInstance.value) {
+    mapInstance.value.remove();
+    mapInstance.value = null;
+  }
+  if (coordMapInstance.value) {
+    coordMapInstance.value.remove();
+    coordMapInstance.value = null;
+  }
+  coordMarker.value = null;
   
   isAuthenticated.value = false;
   isAdmin.value = false;
   currentUser.value = null;
+  farms.value = [];
+  activeTab.value = "database";
   login.value = "";
   password.value = "";
   rememberMe.value = false;

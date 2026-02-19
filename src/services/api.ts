@@ -1,6 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 // Базовый URL для статических файлов (изображений, документов)
-export const BACKEND_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
+export const BACKEND_URL = import.meta.env.VITE_API_URL?.replace(/\/api$/, '') || 'http://localhost:3001';
 
 interface ApiResponse<T = any> {
   success: boolean;

@@ -28,10 +28,9 @@ const __dirname = path.dirname(__filename);
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://qarasora.kz',
+  'https://www.qarasora.kz',
   process.env.FRONTEND_URL,
-  // Добавьте сюда URL вашего деплоя после создания
-  // 'https://qarasora.onrender.com',
-  // 'https://your-custom-domain.com'
 ].filter(Boolean);
 
 app.use(cors({
